@@ -2,7 +2,15 @@ import re
 
 
 def get_phone_numbers(text):
-    template = r'((\+7|8)[-\s]?((\(\d{3}\))|\d{3})[-\s]?\d{3}[-\s]?\d{2}[-\s]?\d{2})'
+    template_map = {
+        't1': r'\(\+\d{1,3}\s\d{2,3}(-\d{2})?\)',
+        't2': r'\+\d{1,3}\s\d{2,3}(-\d{2})?',
+        't3': r'\+\d{1,3}\s\(\d{2,3}(-\d{2})?\)',
+        't4': r'\d{2,3}(-\d{2})+'
+    }
+
+    template = r'((({t1}|{t2}|{t3})\s)?{t4})'.format_map(template_map)
+
     return (match.group(1) for match in re.finditer(template, text))
 
 
